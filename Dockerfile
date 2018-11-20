@@ -4,7 +4,7 @@ RUN yum -y install http://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-l
     yum -y install epel-release \
                    yum-plugin-priorities && \
     yum -y install cronie && \
-    yum -y install xrootd-server --enablerepo=hcc-testing && \
+    yum -y install xrootd-server xrootd-libs xrootd-server-libs && \
     yum -y install supervisor
 
 
