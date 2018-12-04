@@ -32,13 +32,28 @@ spec:
           value: GreatPLains-Kubernetes-PRP
         - name: XRPORT
           value: "8000"
+        - name: REDIRECTOR
+          value: osg.kans.nrp.internet2.edu
         imagePullPolicy: Always
         volumeMounts:
         - name: config
           mountPath: /etc/xrootd
+        - name: hostcert
+          mountPath: /etc/grid-security/hostcert.pem
+        - name: hostkey
+          mountPath: /etc/grid-security/hostkey.pem
       volumes:
       - name: config
         configMap:
           name: stashcache-redirector
+      - name : hostcert
+        hostPath:
+           path: /etc/grid-security/hostcert.pem
+           type: File
+      - name : hostkey
+        hostPath:
+           path: /etc/grid-security/hostkey.pem
+           type: File
+
 
 
