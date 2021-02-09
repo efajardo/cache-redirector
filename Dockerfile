@@ -16,4 +16,3 @@ RUN yum install -y xrootd-server --enablerepo=osg-upcoming && \
 
 ADD supervisord.d/* /etc/supervisord.d/
 ADD cache-redirector.cfg /etc/xrootd/
-ADD xrootd/* /etc/xrootd/config.d/
