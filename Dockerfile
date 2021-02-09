@@ -1,15 +1,19 @@
-FROM centos:centos7
+FROM opensciencegrid/software-base:fresh
 
-RUN yum -y install http://repo.opensciencegrid.org/osg/3.4/osg-3.4-el7-release-latest.rpm && \
-    yum -y install epel-release \
-                   yum-plugin-priorities && \
-    yum -y install cronie && \
-    yum -y install xrootd-server xrootd-libs xrootd-server-libs && \
-    yum -y install supervisor
+LABEL maintainer OSG Software <help@opensciencegrid.org>
 
+# Create the xrootd user with a fixed GID/UID
+RUN groupadd -o -g 10940 xrootd
+RUN useradd -o -u 10940 -g 10940 -s /bin/sh xrootd
 
-RUN mkdir -p /var/log/supervisor
-ADD supervisord.conf /etc/supervisord.conf
-ADD fix_certs.sh /usr/local/sbin/fix_certs.sh
+RUN yum update -y && \
+    yum clean all && \
+    rm -rf /var/cache/yum/*
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"] 
+RUN yum install -y xrootd-server --enablerepo=osg-upcoming && \
+    yum clean all && \
+    rm -rf /var/cache/yum/*
+
+ADD supervisord.d/* /etc/supervisord.d/
+ADD cache-redirector.cfg /etc/xrootd/
+ADD xrootd/* /etc/xrootd/config.d/
